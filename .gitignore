@@ -26,3 +26,7 @@ frontend/dist/
 # OS
 .DS_Store
 Thumbs.db
+
+backend/credentials.json
+backend/credentials*.json
+backend/*.json
