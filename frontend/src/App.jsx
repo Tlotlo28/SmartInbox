@@ -1,5 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useSearchParams, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { useAuth } from "./context/AuthContext";
+import PageTransition from "./components/layout/PageTransition";
 import LoginPage from "./pages/LoginPage";
 import InboxPage from "./pages/InboxPage";
 import EmailDetailPage from "./pages/EmailDetailPage";
@@ -10,25 +12,33 @@ import SettingsPage from "./pages/SettingsPage";
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   const [searchParams] = useSearchParams();
-
   if (loading) return null;
-
   const userId = searchParams.get("user_id");
   if (!user && !userId) return <Navigate to="/" replace />;
-
   return children;
 }
 
-export default function App() {
+function AnimatedRoutes() {
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <PageTransition>
+              <LoginPage />
+            </PageTransition>
+          }
+        />
         <Route
           path="/inbox"
           element={
             <ProtectedRoute>
-              <InboxPage />
+              <PageTransition>
+                <InboxPage />
+              </PageTransition>
             </ProtectedRoute>
           }
         />
@@ -36,7 +46,9 @@ export default function App() {
           path="/email/:id"
           element={
             <ProtectedRoute>
-              <EmailDetailPage />
+              <PageTransition>
+                <EmailDetailPage />
+              </PageTransition>
             </ProtectedRoute>
           }
         />
@@ -44,7 +56,9 @@ export default function App() {
           path="/archive"
           element={
             <ProtectedRoute>
-              <ArchivePage />
+              <PageTransition>
+                <ArchivePage />
+              </PageTransition>
             </ProtectedRoute>
           }
         />
@@ -52,7 +66,9 @@ export default function App() {
           path="/categories"
           element={
             <ProtectedRoute>
-              <CategoriesPage />
+              <PageTransition>
+                <CategoriesPage />
+              </PageTransition>
             </ProtectedRoute>
           }
         />
@@ -60,11 +76,21 @@ export default function App() {
           path="/settings"
           element={
             <ProtectedRoute>
-              <SettingsPage />
+              <PageTransition>
+                <SettingsPage />
+              </PageTransition>
             </ProtectedRoute>
           }
         />
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }
