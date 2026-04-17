@@ -21,8 +21,13 @@ REDIRECT_URI = "http://localhost:8000/auth/callback"
 
 
 def get_client_config():
-    with open(CREDENTIALS_FILE, "r") as f:
-        creds_data = json.load(f)
+    import os
+    creds_env = os.getenv("GOOGLE_CREDENTIALS_JSON")
+    if creds_env:
+        creds_data = json.loads(creds_env)
+    else:
+        with open(CREDENTIALS_FILE, "r") as f:
+            creds_data = json.load(f)
     return creds_data.get("web", creds_data.get("installed", {}))
 
 
