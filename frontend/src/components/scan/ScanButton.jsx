@@ -14,7 +14,7 @@ export default function ScanButton({ emailId, userId, onResult }) {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/scan/single?message_id=${emailId}&user_id=${userId}`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/scan/single?message_id=${emailId}&user_id=${userId}`,
         { method: "POST" }
       );
       const data = await res.json();

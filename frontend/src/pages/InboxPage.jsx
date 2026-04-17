@@ -67,7 +67,7 @@ export default function InboxPage() {
 
       try {
         const res = await fetch(
-          `http://localhost:8000/scan/single?message_id=${email.id}&user_id=${user.id}`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/scan/single?message_id=${email.id}&user_id=${user.id}`,
           { method: "POST" }
         );
         const data = await res.json();
