@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from backend.database.db import init_db
-from backend.routers import auth, emails, archive, scan
+from backend.routers import auth, emails, archive, scan, categories
 import os
 from dotenv import load_dotenv
 
@@ -38,6 +38,7 @@ app.include_router(auth.router)
 app.include_router(emails.router)
 app.include_router(archive.router)
 app.include_router(scan.router)
+app.include_router(categories.router)
 
 
 @app.get("/")
